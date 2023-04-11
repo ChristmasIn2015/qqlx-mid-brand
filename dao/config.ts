@@ -11,6 +11,8 @@ export class Config implements QQLXConfig {
     corpId: string;
     @Prop({ default: "" })
     titles: string;
+    @Prop({ default: true })
+    confirmAuto: boolean;
 
     @Prop({ required: true })
     _id: string;

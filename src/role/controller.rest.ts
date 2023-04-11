@@ -48,7 +48,7 @@ export class BrandRoleController {
     @Post("/get")
     @SetMetadata("BrandRole", ENUM_BRAND_ROLE_ALL)
     async getBrandRole(@Body("dto") dto: getBrandRoleDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<getBrandRoleRes> {
-        const roles = await this.BrandRoleDao.query({ $match: { corpId: BrandDTO.corp._id } });
+        const roles = await this.BrandRoleDao.query({ corpId: BrandDTO.corp._id });
         const userInfos = await this.UserRemote.getUserInfoList({ userIds: roles.map((e) => e.userId) });
 
         return (roles as BrandRoleJoined[]).map((e) => {
@@ -61,6 +61,7 @@ export class BrandRoleController {
     @SetMetadata("BrandRole", [ENUM_BRAND_ROLE.ROOT])
     async deleteBrandRole(@Body("dto") dto: deleteBrandRoleDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<deleteBrandRoleRes> {
         const exit: BrandRole = await this.BrandRoleDao.findOne(dto.entityId);
+        if (exit.role === ENUM_BRAND_ROLE.ROOT) throw new Error(`无法删除管理员`);
 
         if ([ENUM_BRAND_ROLE.TRAINEE, ENUM_BRAND_ROLE.VISITOR].includes(exit.role)) {
             const all = await this.BrandRoleDao.query({ corpId: exit.corpId, userId: exit.userId });

@@ -27,9 +27,11 @@ export class BrandGuard implements CanActivate {
 
         const corpId = request.header("qqlx-corp-id");
         const demands: ENUM_BRAND_ROLE[] = this.reflector.get("BrandRole", context.getHandler());
+        //@ts-ignore
         const dto: getCorpDto = { corpId, userId: userInfo.userId, demands };
         const corp: Corp = await this.CorpService.getCorp(dto);
 
+        //@ts-ignore
         const BrandDTO: BrandDTO = { chain: randomUUID(), userInfo, corp };
         request.body.BrandDTO = BrandDTO;
         return true;

@@ -45,10 +45,10 @@ export class AnnounceController {
         const announces = await this.AnnounceDao.query({ corpId: BrandDTO.corp._id });
 
         if (announces.length === 0) {
-            const schema = this.AnnounceDao.getSchema();
-            schema.corpId = BrandDTO.corp._id;
-            const created = await this.AnnounceDao.create(schema);
-            return [created];
+            // const schema = this.AnnounceDao.getSchema();
+            // schema.corpId = BrandDTO.corp._id;
+            // const created = await this.AnnounceDao.create(schema);
+            // return [created];
         }
 
         return announces;

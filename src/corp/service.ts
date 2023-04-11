@@ -30,6 +30,7 @@ export class CorpService {
                 const matched = [];
 
                 for (const demand of dto.demands) {
+                    //@ts-ignore
                     const match = roles.find((e) => e.role === demand);
                     if (match) {
                         matched.push(match);

@@ -4,10 +4,10 @@ import {
     //
     PATH_BRAND_CONFIG,
     ENUM_BRAND_ROLE,
-    postConfigCorpDto,
-    postConfigCorpRes,
-    getConfigCorpDto,
-    getConfigCorpRes,
+    postConfigDto,
+    postConfigRes,
+    getConfigDto,
+    getConfigRes,
 } from "qqlx-core";
 import { BrandDTO } from "qqlx-sdk";
 
@@ -24,7 +24,7 @@ export class BrandConfigController {
 
     @Post()
     @SetMetadata("BrandRole", [ENUM_BRAND_ROLE.ROOT])
-    async postConfigCorp(@Body("dto") dto: postConfigCorpDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<postConfigCorpRes> {
+    async postConfig(@Body("dto") dto: postConfigDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<postConfigRes> {
         const entity = await this.ConfigDao.findOne(BrandDTO.corp._id, "corpId");
 
         if (entity) {
@@ -41,7 +41,7 @@ export class BrandConfigController {
 
     @Post("/get")
     @SetMetadata("BrandRole", ENUM_BRAND_ROLE_ALL)
-    async getConfigCorp(@Body("dto") dto: getConfigCorpDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<getConfigCorpRes> {
+    async getConfig(@Body("dto") dto: getConfigDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<getConfigRes> {
         const entity = await this.ConfigDao.findOne(BrandDTO.corp._id, "corpId");
 
         if (entity) {
