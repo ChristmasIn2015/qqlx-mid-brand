@@ -16,7 +16,7 @@ export class BrandRoleRpc {
     @MessagePattern("getMarketRole") // 需要客户端 send 并返回值
     @ToResponse()
     async getCorp(dto: getMarketRoleDto) {
-        const roles = await this.BrandRoleDao.query({ userId: dto.userId });
+        const roles = await this.BrandRoleDao.query({ userId: dto.userId, corpId: dto.corpId });
         const isRoot = roles.find((e) => e.role === ENUM_BRAND_ROLE.ROOT);
         if (isRoot) return null;
 
