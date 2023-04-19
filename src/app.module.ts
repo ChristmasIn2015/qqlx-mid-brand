@@ -22,6 +22,7 @@ import { WarehouseController } from "src/warehouse/controller.rest";
 
 import { CorpRpc } from "src/corp/controller.rpc";
 import { ContactRpc } from "src/contact/controller.rpc";
+import { BrandRoleRpc } from "src/role/controller.rpc";
 
 @Module({
     imports: [
@@ -45,6 +46,7 @@ import { ContactRpc } from "src/contact/controller.rpc";
         //
         CorpRpc,
         ContactRpc,
+        BrandRoleRpc,
     ],
     providers: [
         AnnounceDao,
