@@ -28,7 +28,7 @@ export class ContactController {
     @Post()
     @SetMetadata("BrandRole", ENUM_BRAND_ROLE_CORE)
     async postContact(@Body("dto") dto: postContactDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<postContactRes> {
-        if (dto.excels?.length > 100) throw new Error(`单次上传限制 100 项`);
+        if (dto.excels?.length > 500) throw new Error(`单次上传限制 500 项`);
 
         for (let schema of dto.excels) {
             if (!schema.name) throw new Error("请输入单位名称");
@@ -43,15 +43,23 @@ export class ContactController {
             creator.remark = schema.remark;
             trimObject(creator);
 
-            const count = await this.ContactDao.count({ corpId: creator.corpId, name: creator.name });
-            if (count === 0) {
+            const contacts = await this.ContactDao.query({ corpId: creator.corpId, name: creator.name });
+            if (contacts.length === 0) {
                 await this.ContactDao.create(creator);
                 success++;
+            } else {
+                for (const entity of contacts) {
+                    const updater = {
+                        ...(schema.address && { address: schema.address }),
+                        ...(schema.remark && { remark: schema.remark }),
+                    };
+                    await this.ContactDao.updateOne(entity._id, updater);
+                }
             }
         }
 
         if (success !== dto.excels.length) {
-            throw new Error(`已成功添加 ${success} 位客户 ，其中 ${dto.excels.length - success} 位客户已存在，请注意检查`);
+            throw new Error(`已成功添加 ${success} 位新客户 ，并重新更新了 ${dto.excels.length - success} 位客户，请注意检查`);
         }
 
         return null;
@@ -95,8 +103,12 @@ export class ContactController {
         if (!dto.name) throw new Error("请输入客户名称");
         const updater = { name: dto.name, address: dto.address, remark: dto.remark };
 
+        // 不允许重复名称
         const exists = await this.ContactDao.query({ corpId: BrandDTO.corp._id, name: dto.name });
-        if (exists.length >= 1) {
+        const same_name_count = exists.filter((e) => e._id !== dto._id).length;
+
+        // 更新
+        if (same_name_count > 0) {
             delete updater.name;
             await this.ContactDao.updateOne(dto._id, updater);
             throw new Error(`检查到相同客户 @${dto.name}，本次未更新客户名称，请注意检查`);
