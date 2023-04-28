@@ -7,6 +7,7 @@ import { Contact, ContactSchema, ContactDao } from "dao/contact";
 import { Corp, CorpSchema, CorpDao } from "dao/corp";
 import { BrandRole, BrandRoleSchema, BrandRoleDao } from "dao/role";
 import { Warehouse, WarehouseSchema, WarehouseDao } from "dao/warehouse";
+import { Area, AreaSchema, AreaDao } from "dao/area";
 
 import { LogRemote } from "remote/log";
 import { UserRemote } from "remote/user";
@@ -19,10 +20,12 @@ import { ContactController } from "src/contact/controller.rest";
 import { CorpController } from "src/corp/controller.rest";
 import { BrandRoleController } from "src/role/controller.rest";
 import { WarehouseController } from "src/warehouse/controller.rest";
+import { AreaController } from "src/area/controller.rest";
 
 import { CorpRpc } from "src/corp/controller.rpc";
 import { ContactRpc } from "src/contact/controller.rpc";
 import { BrandRoleRpc } from "src/role/controller.rpc";
+import { AreaRpc } from "src/area/controller.rpc";
 
 @Module({
     imports: [
@@ -34,6 +37,7 @@ import { BrandRoleRpc } from "src/role/controller.rpc";
             { name: Corp.name, schema: CorpSchema },
             { name: BrandRole.name, schema: BrandRoleSchema },
             { name: Warehouse.name, schema: WarehouseSchema },
+            { name: Area.name, schema: AreaSchema },
         ]),
     ],
     controllers: [
@@ -43,10 +47,12 @@ import { BrandRoleRpc } from "src/role/controller.rpc";
         CorpController,
         BrandRoleController,
         WarehouseController,
+        AreaController,
         //
         CorpRpc,
         ContactRpc,
         BrandRoleRpc,
+        AreaRpc,
     ],
     providers: [
         AnnounceDao,
@@ -55,6 +61,7 @@ import { BrandRoleRpc } from "src/role/controller.rpc";
         CorpDao,
         BrandRoleDao,
         WarehouseDao,
+        AreaDao,
         //
         LogRemote,
         UserRemote,
