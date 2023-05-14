@@ -2,13 +2,18 @@ import { Injectable } from "@nestjs/common";
 import { Schema, Prop, SchemaFactory, InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 
-import { Contact as QQLXContact } from "qqlx-core";
+import { Contact as QQLXContact, ENUM_CONTACT } from "qqlx-core";
 import { MongooseDao } from "qqlx-sdk";
 
 @Schema()
 export class Contact implements QQLXContact {
     @Prop({ default: "", required: true })
     corpId: string;
+    @Prop({
+        default: ENUM_CONTACT.SALES,
+        enum: [ENUM_CONTACT.NONE, ENUM_CONTACT.PURCHASE, ENUM_CONTACT.SALES],
+    })
+    type: ENUM_CONTACT;
     @Prop({ default: "" })
     name: string;
     @Prop({ default: "" })

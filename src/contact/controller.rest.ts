@@ -38,6 +38,7 @@ export class ContactController {
         for (let schema of dto.excels) {
             const creator = this.ContactDao.getSchema();
             creator.corpId = BrandDTO.corp._id;
+            creator.type = schema.type;
             creator.name = schema.name;
             creator.address = schema.address;
             creator.remark = schema.remark;
@@ -81,7 +82,7 @@ export class ContactController {
         }
 
         // 搜索
-        const base = { corpId: BrandDTO.corp._id, isDisabled: dto.search.isDisabled };
+        const base = { corpId: BrandDTO.corp._id, type: dto.search.type, isDisabled: dto.search.isDisabled };
         const keyword = dto.search.name || "";
         const search = {
             $or: [
@@ -101,7 +102,7 @@ export class ContactController {
     @SetMetadata("BrandRole", ENUM_BRAND_ROLE_CORE)
     async patchContact(@Body("dto") dto: patchContactDto, @Body("BrandDTO") BrandDTO: BrandDTO): Promise<patchContactRes> {
         if (!dto.name) throw new Error("请输入客户名称");
-        const updater = { name: dto.name, address: dto.address, remark: dto.remark };
+        const updater = { name: dto.name, address: dto.address, remark: dto.remark, type: dto.type };
 
         // 不允许重复名称
         const exists = await this.ContactDao.query({ corpId: BrandDTO.corp._id, name: dto.name });
