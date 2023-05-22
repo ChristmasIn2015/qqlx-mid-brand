@@ -82,7 +82,7 @@ export class ContactController {
         }
 
         // 搜索
-        const base = { corpId: BrandDTO.corp._id, type: dto.search.type, isDisabled: dto.search.isDisabled };
+        const base = { corpId: BrandDTO.corp._id, isDisabled: dto.search.isDisabled, ...(dto.search.type && { type: dto.search.type }) };
         const keyword = dto.search.name || "";
         const search = {
             $or: [
